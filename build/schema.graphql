@@ -42,7 +42,7 @@ type _Schema_
   )
 
 type Buy @entity {
-  id: ID!
+  id: Bytes!
   from: Bytes! # address
   to: Bytes! # address
   tokenId: BigInt! # uint256
@@ -52,6 +52,5 @@ type Buy @entity {
   Name: String
   Description: String
   ImageUrl: String
-  price: String
+  price: BigInt
 }
-

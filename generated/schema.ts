@@ -425,9 +425,9 @@ export class Transfer extends Entity {
 }
 
 export class Buy extends Entity {
-  constructor(id: string) {
+  constructor(id: Bytes) {
     super();
-    this.set("id", Value.fromString(id));
+    this.set("id", Value.fromBytes(id));
   }
 
   save(): void {
@@ -435,32 +435,32 @@ export class Buy extends Entity {
     assert(id != null, "Cannot save Buy entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type Buy must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.BYTES,
+        `Entities of type Buy must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("Buy", id.toString(), this);
+      store.set("Buy", id.toBytes().toHexString(), this);
     }
   }
 
-  static loadInBlock(id: string): Buy | null {
-    return changetype<Buy | null>(store.get_in_block("Buy", id));
+  static loadInBlock(id: Bytes): Buy | null {
+    return changetype<Buy | null>(store.get_in_block("Buy", id.toHexString()));
   }
 
-  static load(id: string): Buy | null {
-    return changetype<Buy | null>(store.get("Buy", id));
+  static load(id: Bytes): Buy | null {
+    return changetype<Buy | null>(store.get("Buy", id.toHexString()));
   }
 
-  get id(): string {
+  get id(): Bytes {
     let value = this.get("id");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toString();
+      return value.toBytes();
     }
   }
 
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
   }
 
   get from(): Bytes {
@@ -592,20 +592,20 @@ export class Buy extends Entity {
     }
   }
 
-  get price(): string | null {
+  get price(): BigInt | null {
     let value = this.get("price");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toString();
+      return value.toBigInt();
     }
   }
 
-  set price(value: string | null) {
+  set price(value: BigInt | null) {
     if (!value) {
       this.unset("price");
     } else {
-      this.set("price", Value.fromString(<string>value));
+      this.set("price", Value.fromBigInt(<BigInt>value));
     }
   }
 }
