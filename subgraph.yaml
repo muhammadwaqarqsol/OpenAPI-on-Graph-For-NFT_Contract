@@ -1,6 +1,9 @@
 specVersion: 0.0.5
 schema:
   file: ./schema.graphql
+features:
+  - ipfsOnEthereumContracts
+  - fullTextSearch
 dataSources:
   - kind: ethereum
     name: Contract
@@ -14,28 +17,14 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Approval
-        - ApprovalForAll
-        - BatchMetadataUpdate
-        - MetadataUpdate
-        - NFTBought
-        - NFTCreated
-        - NFTListed
-        - NFTTransferred
-        - NFTUnlisted
+        - Token
+        - User
         - Transfer
+        - Buy
       abis:
         - name: Contract
           file: ./abis/Contract.json
       eventHandlers:
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
-        - event: BatchMetadataUpdate(uint256,uint256)
-          handler: handleBatchMetadataUpdate
-        - event: MetadataUpdate(uint256)
-          handler: handleMetadataUpdate
         - event: NFTBought(indexed address,indexed address,indexed uint256,string,uint256)
           handler: handleNFTBought
         - event: NFTCreated(indexed address,string,uint256)
@@ -46,6 +35,4 @@ dataSources:
           handler: handleNFTTransferred
         - event: NFTUnlisted(indexed address,indexed uint256,string)
           handler: handleNFTUnlisted
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
       file: ./src/contract.ts
